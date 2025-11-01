@@ -1,3 +1,17 @@
+# Terraform files to ignore
+# Ignore the .terraform directory
+.terraform/
+# Optionally ignore Terraform state files and crash logs
+.terraform*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+# Optionally ignore sensitive variable files
+# *.tfvars
+# *.tfvars.json
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
