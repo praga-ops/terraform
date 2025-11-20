@@ -14,10 +14,18 @@ module "vpc" {
     project_tag = var.project_tag
 }
 
+module "subnet" {
+    source = "../../modules/subnet"
+    kube_subnet = var.kube_subnet
+    kube_vpc = module.vpc.main_cidr_id
+    project_tag = var.project_tag
+}
+
 output "List-of-changes" {
     value = <<EOT
     1. This will create a IAM user "${var.admin_user}"
     2. This will create a VPC "${var.main_cidr}"
+    3. This will create a Subnet for Kubernetes "${var.kube_subnet}"
     EOT
 }
 
