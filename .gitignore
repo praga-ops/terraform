@@ -5,6 +5,7 @@
 .terraform*
 *.tfstate
 *.tfstate.*
+*.tfvars
 crash.log
 crash.*.log
 # Optionally ignore sensitive variable files
