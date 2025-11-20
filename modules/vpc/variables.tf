@@ -1,5 +1,5 @@
-variable "admin_user" {
-    description = "This is to create the admin user"
+variable "main_cidr" {
+    description = "This is the main CIDR block"
     type = string
 }
 

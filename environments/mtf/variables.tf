@@ -4,6 +4,11 @@ variable "admin_user" {
 }
 
 variable "project_tag" {
-    description = "This is to create the user tag"
+    description = "This is to create the project tag"
+    type = string
+}
+
+variable "main_cidr" {
+    description = "This is the main CIDR block"
     type = string
 }

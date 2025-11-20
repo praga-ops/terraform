@@ -4,6 +4,6 @@ variable "admin_user" {
 }
 
 variable "project_tag" {
-    description = "This is to create the project tag"
+    description = "This is to create the user tag"
     type = string
 }
