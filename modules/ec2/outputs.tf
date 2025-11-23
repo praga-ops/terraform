@@ -1,3 +1,3 @@
-output "admin_user" {
-    value = aws_iam_user.admin.name
+output "kube-server" {
+    value = aws_instance.main.public_ip
 }
