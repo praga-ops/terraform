@@ -1,3 +1,8 @@
+variable "enable_iam" {
+    type = bool
+    default = true
+}
+
 variable "admin_user" {
     description = "This is to create the admin user"
     type = string

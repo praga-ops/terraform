@@ -1,3 +1,8 @@
+variable "enable_vpc" {
+    type = bool
+    default = true
+}
+
 variable "main_cidr" {
     description = "This is the main CIDR block"
     type = string

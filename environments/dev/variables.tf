@@ -1,95 +1,56 @@
-variable "enable_ec2" {
-    type = bool
-    default = true
-}
-
-variable "enable_iam" {
-    type = bool
-    default = true
-}
-
-variable "enable_keypair" {
-    type = bool
-    default = true
-}
-
-variable "enable_subnet" {
-    type = bool
-    default = true
-}
-
-variable "enable_vpc" {
-    type = bool
-    default = true
-}
-
-variable "iam_user" {
+variable "admin_user" {
     description = "This is to create the admin user"
-    type = map (object ({
-        name = string
-        project = string
-    }))
+    type = string
 }
 
 variable "project_tag" {
     description = "This is to create the project tag"
     type = string
-    default = null
 }
 
-variable "vpcs" {
+variable "main_cidr" {
     description = "This is the main CIDR block"
-    type = map (object ({
-        cidr_block = string
-        project = string
-    }))
+    type = string
 }
 
 variable "kube_subnet" {
     description = "This is the subnet for Kubernetes"
     type = string
-    default = null
 }
 
 variable "kube_vpc" {
     description = "This is the VPC for Kubernetes"
     type = string
-    default = null
 }
 
 variable "key_pair_name" {
     type = string
     description = "This is to create ssh keys assign to EC2 machines for remote access"
-    default = null
 }
 
 variable "pub_key" {
     type = string
     sensitive = true
+    
     description = "This is to assign the public_key"
-    default = null
 }
 
 variable "kube_ami" {
     type = string
     description = "This is the kubernetes base ami"
-    default = null
 }
 
 variable "kube_ec2_type" {
     type = string
     description = "This is the Kubernetes ec2 instance type"
-    default = null
 }
 
 variable "kube_ec2_subnet" {
     type = string
     description = "This is the Kubernetes cluster subnet"
-    default = null
 }
 
 variable "kube_key_name" {
     type = string
     description = "This is the base kubernetes key to access EC2"
-    default = null
 }
