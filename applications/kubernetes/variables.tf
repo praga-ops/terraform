@@ -1,55 +1,72 @@
-variable "admin_user" {
-    description = "This is to create the admin user"
-    type = string
+variable "enable_ec2" {
+    type = bool
+    default = true
+}
+
+variable "enable_iam" {
+    type = bool
+    default = true
+}
+
+variable "enable_keypair" {
+    type = bool
+    default = true
+}
+
+variable "enable_subnet" {
+    type = bool
+    default = true
+}
+
+variable "enable_vpc" {
+    type = bool
+    default = true
 }
 
 variable "project_tag" {
     description = "This is to create the project tag"
     type = string
+    default = null
 }
 
-variable "main_cidr" {
+variable "iam_user" {
+    description = "This is to create the admin user"
+    type = map (object ({
+        name = string
+        project = string
+    }))
+}
+
+variable "vpcs" {
     description = "This is the main CIDR block"
-    type = string
+    type = map (object ({
+        cidr_block = string
+        project = string
+    }))
 }
 
-variable "kube_subnet" {
-    description = "This is the subnet for Kubernetes"
-    type = string
+variable "subs" {
+    description = "This is the main subnet"
+    type = map (object ({
+        cidr_block = string
+        project = string
+    }))
 }
 
-variable "kube_vpc" {
-    description = "This is the VPC for Kubernetes"
-    type = string
+variable "keys" {
+    description = "This is to create new key pairs"
+    type = map (object({
+        key_name = string
+        public_key = string
+    }))
 }
 
-variable "key_pair_name" {
-    type = string
-    description = "This is to create ssh keys assign to EC2 machines for remote access"
-}
-
-variable "pub_key" {
-    type = string
-    sensitive = true
-    description = "This is to assign the public_key"
-}
-
-variable "kube_ami" {
-    type = string
-    description = "This is the kubernetes base ami"
-}
-
-variable "kube_ec2_type" {
-    type = string
-    description = "This is the Kubernetes ec2 instance type"
-}
-
-variable "kube_ec2_subnet" {
-    type = string
-    description = "This is the Kubernetes cluster subnet"
-}
-
-variable "kube_key_name" {
-    type = string
-    description = "This is the base kubernetes key to access EC2"
+variable "instances" {
+    type = map (object ({
+        ami = string
+        instance_type = string
+        project = string
+        kube_subnet_for_ec2 = string
+        kube_key_pair_for_ec2 = string
+    }))
 }

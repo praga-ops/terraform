@@ -1,3 +1,8 @@
+variable "enable_subnet" {
+    type = bool
+    default = true
+}
+
 variable "kube_subnet" {
     description = "This is the subnet for Kubernetes"
     type = string

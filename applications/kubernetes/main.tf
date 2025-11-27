@@ -2,75 +2,82 @@ provider "aws" {
         region = "ap-south-1"
 }
 
+locals {
+    subnet_map = {
+        for sub, s in var.subs:
+        sub => (
+            [for k, v in var.vpcs:
+                k if split("/", v.cidr_block)[0] == split("/", s.cidr_block)[0]
+            ][0]
+        )
+    }
+}
+
 module "iam" {
     source = "../../modules/iam"
 
-    admin_user = var.admin_user
-    project_tag = var.project_tag
+    for_each = var.iam_user
+
+    admin_user = each.value.name
+    project_tag = each.value.project
 }
 
 module "vpc" {
     source = "../../modules/vpc"
 
-    main_cidr = var.main_cidr
-    project_tag = var.project_tag
+    for_each = var.vpcs
+
+    main_cidr = each.value.cidr_block
+    project_tag = each.value.project
 }
 
 module "subnet" {
     source = "../../modules/subnet"
 
-    kube_subnet = var.kube_subnet
-    kube_vpc = module.vpc.main_cidr_id
-    project_tag = var.project_tag
+    for_each = var.subs
+
+    kube_vpc = module.vpc[local.subnet_map[each.key]].main_cidr_id
+    kube_subnet = each.value.cidr_block
+    project_tag = each.value.project
 }
 
 module "key_pair" {
     source = "../../modules/key_pair"
 
-    key_pair_name = var.key_pair_name
-    pub_key = var.pub_key
+    for_each = var.keys
+
+    key_pair_name = each.value.key_name
+    pub_key = each.value.public_key
 }
 
 module "ec2" {
     source = "../../modules/ec2"
 
-    kube_ami = var.kube_ami
-    kube_ec2_type = var.kube_ec2_type
-    kube_ec2_subnet = module.subnet.kube_cluster_subnet_id
-    kube_key_name = module.key_pair.SSH_key_name
-    project_tag = var.project_tag
+    for_each = var.instances
+
+    kube_ami      = each.value.ami
+    kube_ec2_type = each.value.instance_type
+    kube_ec2_subnet    = module.subnet[each.value.kube_subnet_for_ec2].kube_cluster_subnet_id
+    kube_key_name = module.key_pair[each.value.kube_key_pair_for_ec2].SSH_key_name
+    project_tag = each.value.project
 }
 
-output "List-of-changes" {
-    value = <<EOT
-    1. This will create a IAM user "${var.admin_user}"
-    2. This will create a VPC "${var.main_cidr}"
-    3. This will create a Subnet for Kubernetes "${var.kube_subnet}"
-    4. This will create a Key-pair for EC2 instances"
-    5. This will create a EC2 instance in kube-VPC and kube-subnet.
-    EOT
+output "main_cidr_id" {
+    value = { for k, v in module.vpc : k => v.main_cidr_id }
 }
 
-output "admin_user" {
-    value = module.iam.admin_user
+output "main_iam_users" {
+    value = { for k, v in module.iam : k => v.admin_user}
 }
 
-output "main_cidr" {
-    value = module.vpc.main_cidr
+output "main_subnet_id" {
+    value = { for k, v in module.subnet : k => v.kube_cluster_subnet_id }
 }
 
-output "SSH_key_name" {
-    value = module.key_pair.SSH_key_name
+output "ssh_key_name" {
+    value = { for k, v in module.key_pair : k => v.SSH_key_name}
 }
 
-output "kube-server" {
-    value = module.ec2.kube-server
-}
-
-output "kube_subnet" {
-    value = module.subnet.kube_cluster_subnet
-}
-
-output "kube_vpc" {
-    value = module.subnet.kube_cluster_vpc
+output "ec2_instances_ip" {
+    value = { for k, v in module.ec2 : k => v.kube-server}
 }

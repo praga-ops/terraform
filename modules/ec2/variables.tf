@@ -1,3 +1,8 @@
+variable "enable_ec2" {
+    type = bool
+    default = true
+}
+
 variable "kube_ami" {
     type = string
     description = "This is the kubernetes base ami"
