@@ -57,8 +57,8 @@ module "ec2" {
 
     kube_ami      = each.value.ami
     kube_ec2_type = each.value.instance_type
-    kube_ec2_subnet    = module.subnet.main_subnet_id
-    kube_key_name = module.key_pair.ssh_key_name[0]
+    kube_ec2_subnet    = module.subnet[each.value.kube_subnet_for_ec2].kube_cluster_subnet_id
+    kube_key_name = module.key_pair[each.value.kube_key_pair_for_ec2].SSH_key_name
     project_tag = each.value.project
 }
 
@@ -76,4 +76,8 @@ output "main_subnet_id" {
 
 output "ssh_key_name" {
     value = { for k, v in module.key_pair : k => v.SSH_key_name}
+}
+
+output "ec2_instances_ip" {
+    value = { for k, v in module.ec2 : k => v.kube-server}
 }

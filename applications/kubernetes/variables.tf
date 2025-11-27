@@ -66,5 +66,7 @@ variable "instances" {
         ami = string
         instance_type = string
         project = string
+        kube_subnet_for_ec2 = string
+        kube_key_pair_for_ec2 = string
     }))
 }
