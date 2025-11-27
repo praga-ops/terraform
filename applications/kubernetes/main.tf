@@ -22,6 +22,15 @@ module "iam" {
     project_tag = each.value.project
 }
 
+module "igw" {
+    source = "../../modules/igw"
+
+    for_each = var.igws
+
+    vpc_cidr = module.vpc[each.value.vpc_id].main_cidr_id
+    project_tag = each.value.project
+}
+
 module "vpc" {
     source = "../../modules/vpc"
 
@@ -80,4 +89,8 @@ output "ssh_key_name" {
 
 output "ec2_instances_ip" {
     value = { for k, v in module.ec2 : k => v.kube-server}
+}
+
+output "igw_ids" {
+  value = { for k, v in data.aws_internet_gateway.default : k => v.id }
 }

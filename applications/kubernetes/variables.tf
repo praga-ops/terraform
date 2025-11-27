@@ -37,6 +37,14 @@ variable "iam_user" {
     }))
 }
 
+variable "igws" {
+    description = "This is for the igw to create and attach to the VPC"
+    type = map (object ({
+        vpc_id = string
+        project = string
+    }))
+}
+
 variable "vpcs" {
     description = "This is the main CIDR block"
     type = map (object ({
