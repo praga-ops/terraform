@@ -92,5 +92,5 @@ output "ec2_instances_ip" {
 }
 
 output "igw_ids" {
-  value = { for k, v in data.aws_internet_gateway.default : k => v.id }
+  value = data.aws_internet_gateway.default
 }

@@ -1,5 +1,6 @@
 data "aws_internet_gateway" "default" {
-    tags = {
-        project = var.project_tag
+    filter {
+        name = "owner-id"
+        values = ["152569708196"]
     }
 }
